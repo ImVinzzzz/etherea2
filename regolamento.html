@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regolamento — I Guardiani di Etherea</title>
+  <meta name="description" content="Il regolamento completo di I Guardiani di Etherea: componenti, regole, e video tutorial.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="img/logo_i.png">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="stylesheet.css">
+
+  <style>
+    /* ── REGOLAMENTO-ONLY STYLES ── */
+    .rules-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .rules-heading {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.5rem;
+    }
+
+    .component-item {
+      background: rgba(15,32,64,0.6);
+      border: 1px solid var(--blue-border);
+      border-radius: 6px;
+      padding: 1.5rem 1.2rem;
+      text-align: center;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .component-item:hover {
+      border-color: rgba(230,30,35,0.4);
+      transform: translateY(-3px);
+    }
+
+    .component-item i {
+      font-size: 2rem;
+      color: var(--red);
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .component-item .comp-name {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-bright);
+      margin-bottom: 0.3rem;
+    }
+
+    .component-item .comp-qty {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .rule-box {
+      background: rgba(230,30,35,0.04);
+      border-left: 3px solid var(--red);
+      border-radius: 0 4px 4px 0;
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .rule-box strong {
+      color: var(--red);
+    }
+
+    /* Phase steps */
+    .phase-list {
+      list-style: none;
+      counter-reset: phase;
+      margin: 1.5rem 0;
+    }
+
+    .phase-list li {
+      counter-increment: phase;
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      align-items: flex-start;
+    }
+
+    .phase-list li:last-child { border-bottom: none; }
+
+    .phase-list li::before {
+      content: counter(phase);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--red);
+      color: var(--red);
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .download-banner {
+      background: linear-gradient(135deg, rgba(230,30,35,0.12) 0%, rgba(176,21,25,0.08) 100%);
+      border: 1px solid rgba(230,30,35,0.3);
+      border-radius: 8px;
+      padding: 3rem;
+      text-align: center;
+      margin: 4rem 0 2rem;
+    }
+
+    .download-banner h2 { margin-bottom: 0.8rem; }
+    .download-banner p  { color: var(--text-muted); max-width: 460px; margin: 0 auto 2rem; }
+  </style>
+</head>
+<body>
+
+<div id="nav-container"></div>
+
+<div class="page-wrapper">
+
+  <!-- Page hero -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-label">
+        <i class="fa-solid fa-book-open" style="margin-right:0.4em;"></i>Regole di Gioco
+      </span>
+      <h1>Regolamento</h1>
+      <p style="max-width:560px;margin:1rem auto 0;color:var(--text-muted);font-size:1.05rem;">
+        Tutto ciò che ti serve per iniziare a giocare a I Guardiani di Etherea.
+      </p>
+    </div>
+  </div>
+
+  <div class="red-glow-line"></div>
+
+  <div class="container" style="padding-top:1rem;">
+
+    <!-- Quick download bar -->
+    <div style="display:flex;justify-content:flex-end;padding:1.5rem 0 0.5rem;gap:1rem;flex-wrap:wrap;">
+      <a href="regolamento.pdf" download class="btn btn-primary">
+        <i class="fa-solid fa-download"></i> Scarica PDF
+      </a>
+    </div>
+
+    <!-- ═══ SEZIONE 1: INTRODUZIONE ═══ -->
+    <section class="rules-section fade-in-on-scroll">
+      <div class="rules-heading">
+        <span class="rules-number">1</span>
+        <h2>Introduzione al Gioco</h2>
+      </div>
+      <div class="rules-grid">
+        <div>
+          <p>
+            [Testo segnaposto] I Guardiani di Etherea è un gioco da tavolo cooperativo/competitivo
+            per <strong>2–6 giocatori</strong>, adatto a partire dai 12 anni. La durata media di
+            una partita è di <strong>60–120 minuti</strong>, a seconda del numero di partecipanti
+            e della modalità scelta.
+          </p>
+          <p>
+            [Testo segnaposto] Lo scopo del gioco è guidare il proprio Guardiano attraverso i
+            labirinti di Etherea, raccogliere risorse elementali, sconfiggere creature corrotte
+            e sigillare i nodi di corruzione sparsi per il tabellone prima che il tempo scada
+            e l'oscurità conquisti tutto.
+          </p>
+          <div class="rule-box">
+            <strong>Obiettivo:</strong> Sigilla tutti i nodi di corruzione prima che il segnalino
+            dell'Oscurità raggiunga il fondo della pista del destino.
+          </div>
+        </div>
+        <div class="rules-img">
+          <div class="rules-img-placeholder">
+            <i class="fa-solid fa-image"></i>
+            <span>Immagine introduttiva</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SEZIONE 2: COMPONENTI ═══ -->
+    <section class="rules-section fade-in-on-scroll">
+      <div class="rules-heading">
+        <span class="rules-number">2</span>
+        <h2>Componenti della Scatola</h2>
+      </div>
+
+      <p>[Testo segnaposto] La scatola di I Guardiani di Etherea contiene tutti i materiali necessari per giocare:</p>
+
+      <div class="component-grid">
+        <div class="component-item">
+          <i class="fa-solid fa-map"></i>
+          <div class="comp-name">Tabellone</div>
+          <div class="comp-qty">1 tabellone doppio lato</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-chess-pawn"></i>
+          <div class="comp-name">Pedine Guardiani</div>
+          <div class="comp-qty">6 miniature in plastica</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-rectangle-history"></i>
+          <div class="comp-name">Carte Elemento</div>
+          <div class="comp-qty">90 carte (15 per elemento)</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-rectangle-history-circle-user"></i>
+          <div class="comp-name">Carte Evento</div>
+          <div class="comp-qty">30 carte evento</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-dice-six"></i>
+          <div class="comp-name">Dadi Speciali</div>
+          <div class="comp-qty">6 dadi a 8 facce</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-puzzle-piece"></i>
+          <div class="comp-name">Tessere Labirinto</div>
+          <div class="comp-qty">48 tessere modulari</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-skull"></i>
+          <div class="comp-name">Segnalini Corruzione</div>
+          <div class="comp-qty">20 segnalini</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-gem"></i>
+          <div class="comp-name">Cristalli Elementali</div>
+          <div class="comp-qty">30 cristalli colorati</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-scroll"></i>
+          <div class="comp-name">Schede Personaggio</div>
+          <div class="comp-qty">6 schede plastificate</div>
+        </div>
+        <div class="component-item">
+          <i class="fa-solid fa-hourglass-half"></i>
+          <div class="comp-name">Pista del Destino</div>
+          <div class="comp-qty">1 striscia tempo</div>
+        </div>
+      </div>
+
+      <div class="rules-grid" style="margin-top:2.5rem;">
+        <div class="rules-img">
+          <div class="rules-img-placeholder">
+            <i class="fa-solid fa-image"></i>
+            <span>Immagine tabellone</span>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:1rem;">Il Tabellone</h3>
+          <p>
+            [Testo segnaposto] Il tabellone rappresenta la mappa di Etherea, divisa in sei regioni
+            elementali. Ogni regione è collegata alle altre da corridoi che possono essere
+            apertos o sbarrati da tessere labirinto. Il lato doppio del tabellone offre
+            due scenari di gioco con difficoltà differente.
+          </p>
+        </div>
+      </div>
+
+      <div class="rules-grid reverse" style="margin-top:2rem;">
+        <div>
+          <h3 style="margin-bottom:1rem;">Le Carte Elemento</h3>
+          <p>
+            [Testo segnaposto] Ogni mazzo elementale include carte Attacco, Difesa, Abilità Speciale
+            e Alleanza. Le carte sono fortemente asimmetriche: il mazzo della Foglia privilegia
+            la guarigione, quello delle Acque la mobilità, quello della Terra la resistenza,
+            e così via. Ogni Guardiano inizia con 5 carte della propria mano.
+          </p>
+        </div>
+        <div class="rules-img">
+          <div class="rules-img-placeholder">
+            <i class="fa-solid fa-image"></i>
+            <span>Immagine carte</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SEZIONE 3: PREPARAZIONE ═══ -->
+    <section class="rules-section fade-in-on-scroll">
+      <div class="rules-heading">
+        <span class="rules-number">3</span>
+        <h2>Preparazione della Partita</h2>
+      </div>
+
+      <div class="rules-grid">
+        <div>
+          <p>[Testo segnaposto] Prima di iniziare ogni partita, eseguire i seguenti passaggi nell'ordine:</p>
+          <ol class="phase-list">
+            <li>
+              <div><strong>Scegliere lo Scenario</strong> — Selezionate uno degli scenari disponibili
+              e posizionate il tabellone sul lato corrispondente.</div>
+            </li>
+            <li>
+              <div><strong>Posizionare i Nodi di Corruzione</strong> — Pescate le tessere corruzione
+              e disponetele nelle posizioni indicate dalla scheda scenario.</div>
+            </li>
+            <li>
+              <div><strong>Scegliere i Guardiani</strong> — Ogni giocatore sceglie un Guardiano,
+              prende la relativa scheda personaggio, la pedina e il mazzo di carte elementali.</div>
+            </li>
+            <li>
+              <div><strong>Posizionare le Pedine</strong> — Collocate le pedine nelle zone di partenza
+              indicate sullo scenario.</div>
+            </li>
+            <li>
+              <div><strong>Preparare il Mazzo Evento</strong> — Mescolate il mazzo eventi e
+              posizionatelo accanto al tabellone.</div>
+            </li>
+            <li>
+              <div><strong>Impostare la Pista del Destino</strong> — Posizionate il segnalino
+              Oscurità nella posizione iniziale (varia per difficoltà).</div>
+            </li>
+          </ol>
+        </div>
+        <div class="rules-img">
+          <div class="rules-img-placeholder">
+            <i class="fa-solid fa-image"></i>
+            <span>Setup iniziale</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SEZIONE 4: TURNO DI GIOCO ═══ -->
+    <section class="rules-section fade-in-on-scroll">
+      <div class="rules-heading">
+        <span class="rules-number">4</span>
+        <h2>Il Turno di Gioco</h2>
+      </div>
+
+      <p>
+        [Testo segnaposto] I giocatori agiscono in senso orario. Ogni turno si svolge
+        nelle seguenti fasi obbligatorie:
+      </p>
+
+      <ol class="phase-list">
+        <li>
+          <div>
+            <strong>Fase Evento</strong> — Pesca e risolvi la prima carta del mazzo Evento.
+            Gli eventi possono modificare temporaneamente le regole, far avanzare l'Oscurità
+            o fornire opportunità speciali.
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Fase Azione</strong> — Il giocatore attivo ha a disposizione
+            <strong>3 Punti Azione (PA)</strong> da spendere tra: Muoversi (1 PA),
+            Combattere (1 PA), Giocare una carta (1 PA), Interagire (1 PA), Sigillare un Nodo (2 PA).
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Fase Corruzione</strong> — Ogni nodo di corruzione attivo avanza.
+            Se un nodo raggiunge il centro della sua regione, quella regione diventa <em>corrotta</em>.
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Pesca Carte</strong> — Il giocatore attivo pesca 2 carte dal proprio mazzo elementale.
+          </div>
+        </li>
+      </ol>
+
+      <div class="rule-box">
+        <strong>Regola Speciale — Combo Elementale:</strong> Se due Guardiani di elementi complementari
+        si trovano sullo stesso spazio, entrambi guadagnano 1 PA bonus durante la Fase Azione.
+        Le coppie complementari sono: Foglia+Terra, Acque+Luce, Tenebre+Pozioni.
+      </div>
+    </section>
+
+    <!-- ═══ SEZIONE 5: COMBATTIMENTO ═══ -->
+    <section class="rules-section fade-in-on-scroll">
+      <div class="rules-heading">
+        <span class="rules-number">5</span>
+        <h2>Il Combattimento</h2>
+      </div>
+
+      <div class="rules-grid">
+        <div>
+          <p>
+            [Testo segnaposto] Quando un Guardiano si trova sullo stesso spazio di una
+            creatura corrotta, può ingaggiare il combattimento. Il combattimento si
+            risolve in questo modo:
+          </p>
+          <ol class="phase-list">
+            <li><div>Il giocatore dichiara se usa un attacco base o gioca una carta Attacco.</div></li>
+            <li><div>Tira il dado a 8 facce e aggiunge il valore di <strong>Forza</strong> del Guardiano.</div></li>
+            <li><div>La creatura risponde con il proprio valore difensivo (indicato sulla sua tessera).</div></li>
+            <li><div>Se l'attacco supera la difesa, la creatura è sconfitta. Altrimenti subisce il danno residuo.</div></li>
+            <li><div>Le creature sconfitte lasciano un cristallo elementale da raccogliere.</div></li>
+          </ol>
+        </div>
+        <div class="rules-img">
+          <div class="rules-img-placeholder">
+            <i class="fa-solid fa-image"></i>
+            <span>Esempio combattimento</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SEZIONE 6: CONDIZIONI DI VITTORIA ═══ -->
+    <section class="rules-section fade-in-on-scroll">
+      <div class="rules-heading">
+        <span class="rules-number">6</span>
+        <h2>Vittoria e Sconfitta</h2>
+      </div>
+
+      <div class="rules-grid">
+        <div class="rules-img">
+          <div class="rules-img-placeholder">
+            <i class="fa-solid fa-image"></i>
+            <span>Finale di partita</span>
+          </div>
+        </div>
+        <div>
+          <h3 style="color:#4ade80;margin-bottom:1rem;">
+            <i class="fa-solid fa-trophy" style="color:#F5BE00;margin-right:0.5em;"></i>Vittoria
+          </h3>
+          <p>
+            [Testo segnaposto] I giocatori vincono se riescono a sigillare <strong>tutti i nodi
+            di corruzione</strong> prima che il segnalino dell'Oscurità raggiunga il simbolo finale
+            della Pista del Destino.
+          </p>
+
+          <h3 style="color:var(--red);margin-bottom:1rem;margin-top:2rem;">
+            <i class="fa-solid fa-skull" style="margin-right:0.5em;"></i>Sconfitta
+          </h3>
+          <p>
+            [Testo segnaposto] I giocatori perdono se: il segnalino Oscurità raggiunge la fine della pista,
+            oppure tutti i Guardiani vengono eliminati simultaneamente,
+            oppure una regione chiave viene completamente corrotta.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SEZIONE 7: VIDEO TUTORIAL ═══ -->
+    <section class="rules-section fade-in-on-scroll">
+      <div class="rules-heading">
+        <span class="rules-number">7</span>
+        <h2>Video Tutorial</h2>
+      </div>
+
+      <p>
+        Guarda i video tutorial per imparare a giocare più velocemente.
+        Disponibili in italiano e in inglese.
+      </p>
+
+      <div class="video-grid">
+        <div>
+          <h3 style="font-size:0.9rem;margin-bottom:0.8rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;">
+            <i class="fa-solid fa-language" style="color:var(--red);margin-right:0.4em;"></i>Tutorial in Italiano
+          </h3>
+          <!-- Sostituisci VIDEO_ID_IT con l'ID reale del video YouTube in italiano -->
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID_IT"
+              title="I Guardiani di Etherea — Tutorial in italiano"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-size:0.9rem;margin-bottom:0.8rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;">
+            <i class="fa-solid fa-language" style="color:var(--red);margin-right:0.4em;"></i>Tutorial in English
+          </h3>
+          <!-- Sostituisci VIDEO_ID_EN con l'ID reale del video YouTube in inglese -->
+          <div class="video-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/VIDEO_ID_EN"
+              title="I Guardiani di Etherea — English tutorial"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download banner -->
+    <div class="download-banner fade-in-on-scroll">
+      <i class="fa-solid fa-file-pdf" style="font-size:3rem;color:var(--red);display:block;margin-bottom:1rem;opacity:0.8;"></i>
+      <h2>Scarica il Regolamento Completo</h2>
+      <p>
+        Il PDF include tutte le regole, le FAQ, le varianti avanzate e i suggerimenti
+        per scenari personalizzati.
+      </p>
+      <a href="regolamento.pdf" download class="btn btn-primary btn-hero">
+        <i class="fa-solid fa-download"></i>&nbsp; Scarica Regolamento PDF
+      </a>
+    </div>
+
+  </div><!-- /container -->
+
+</div><!-- /page-wrapper -->
+
+<footer>
+  <img src="img/logo_i.png" alt="Etherea" class="footer-logo">
+  <p>
+    &copy; <span id="year"></span> I Guardiani di Etherea &mdash;
+    Tutti i diritti riservati
+  </p>
+</footer>
+
+<script src="menu.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

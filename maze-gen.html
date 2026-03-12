@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon SVG -->
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+    <!-- Fallback per browser più vecchi -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <title>Generatore Labirinto | I Guardiani di Etherea</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(180deg, #0a1628 0%, #1a2942 50%, #0a1628 100%);
+            background-attachment: fixed;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(1, auto);
+        }
+
+        .grid {
+            display: flex;
+            justify-content: center;
+            gap: 6px; /* Distanza orizzontale tra le celle */
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .button-container {
+            margin-top: 75px;
+        }
+
+        .refresh-button {
+            /* background-color: #E61E23; /* Colore rosso */
+            /* color: white; /* Testo bianco */
+            /* border: none;
+            /* border-radius: 12px; /* Bordi arrotondati */
+            /* padding: 10px 20px;
+            /* font-size: 16px;
+            /* cursor: pointer;
+            /* transition: background-color 0.3s; */
+            font-size: 1.4em;
+            padding: 20px 50px;
+            display: block;
+            margin: 30px auto;
+            max-width: 400px;
+            display: inline-block;
+            padding: 15px 35px;
+            margin: 10px;
+            background-color: #E61E23;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #E61E23;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .refresh-button:hover {
+            background: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 30, 35, 0.4);
+            /* background-color: #D9141E; /* Colore rosso scuro per hover */
+        }
+    </style>
+</head>
+<div class="grid-container" id="gridContainer"></div>
+<div class="button-container">
+    <button class="refresh-button" onclick="window.location.reload();">GENERA DI NUOVO</button>
+</div>
+
+<script>
+    const predefinedColors = {
+        "grid4": {4: "#3CA03C", 5: "#1E509B"},
+        "grid5": {4: "#962882", 5: "#E61E23", 6: "#F5BE00"},
+        "grid6": {4: "#555A5A", 5: "#E6E1DC"}
+    };
+
+const excludedColors = {
+    "grid3": {
+        2: ["#3CA03C", "#1E509B"],  // Cella 2: non verde, non blu
+        3: ["#1E509B"],             // Cella 3: non blu
+        4: ["#1E509B"]              // Cella 4: non blu
+    },
+    "grid4": {
+        3: ["#3CA03C", "#962882"]   // Cella 3: non verde, non viola
+    },
+    "grid5": {
+        2: ["#962882"]              // Cella 2: non viola
+    },
+    "grid6": {
+        2: ["#962882", "#555A5A"]   // Cella 2: non viola, non grigio scuro
+    }
+};
+
+
+    const colors = ["#3CA03C", "#1E509B", "#F5BE00", "#E6E1DC", "#555A5A", "#962882"];
+    const maxCellsPerColor = 15;
+
+    const gridLengths = [5, 6, 7, 8, 9, 8, 7, 6, 5];
+    const gridArray = [];
+
+    // Definiamo una sola immagine per colore
+    const images = {
+        "#E61E23": "ro.png",
+        "#3CA03C": "ve.png",
+        "#1E509B": "bl.png",
+        "#F5BE00": "gi.png",
+        "#E6E1DC": "bi.png",
+        "#555A5A": "ne.png",
+        "#962882": "vi.png"
+    };
+
+    function generateValidColor(colorCount, previousColor, aboveColors, gridIndex, cellIndex) {
+    // Determina l'ID della griglia corrente
+    const gridId = `grid${gridIndex + 1}`;
+
+    // Verifica se ci sono colori esclusi per questa cella specifica
+    const excludedForCell = (excludedColors[gridId] && excludedColors[gridId][cellIndex - 1]) || [];
+    
+    // Filtra colori disponibili escludendo quelli specificati per la cella, celle sopra e quella precedente
+    let availableColors = colors.filter(color => 
+        colorCount[color] < maxCellsPerColor &&
+        color !== previousColor && 
+        !aboveColors.includes(color) &&
+        !excludedForCell.includes(color) // Nuovo vincolo per cella specifica
+    );
+
+    // Rimozione graduale dei vincoli: eseguita solo se non ci sono colori disponibili che rispettano tutti i vincoli
+    if (availableColors.length === 0) {
+        availableColors = colors.filter(color => 
+            colorCount[color] < maxCellsPerColor &&
+            !excludedForCell.includes(color) // Rimane il vincolo della cella
+        );
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableColors.length);
+    colorCount[availableColors[randomIndex]]++;
+    return availableColors[randomIndex];
+}
+
+    function fillGrids() {
+        const gridContainer = document.getElementById("gridContainer");
+        const colorCount = { "#3CA03C": 0, "#1E509B": 0, "#F5BE00": 0, "#E6E1DC": 0, "#555A5A": 0, "#962882": 0 };
+
+        gridLengths.forEach((numCells, gridIndex) => {
+            const gridElement = document.createElement("div");
+            gridElement.className = "grid";
+
+            const gridId = `grid${gridIndex + 1}`;
+            const predefinedCells = predefinedColors[gridId] || {};
+            gridArray[gridIndex] = [];
+
+            for (let i = 1; i <= numCells; i++) {
+                const cell = document.createElement("div");
+                cell.className = "cell";
+
+                let previousColor = (i > 1) ? gridArray[gridIndex][i - 2] : null;
+                let aboveColors = [];
+
+                if (gridIndex > 0) {
+                    const gridAbove = gridArray[gridIndex - 1];
+                    if (i <= gridAbove.length) aboveColors.push(gridAbove[i - 1]);
+                    if (i > 1) aboveColors.push(gridAbove[i - 2]);
+                    if (i < gridAbove.length) aboveColors.push(gridAbove[i]);
+                }
+
+                let color;
+                if (predefinedCells[i]) {
+                    color = predefinedCells[i];
+                    colorCount[color]++;
+                } else {
+                    color = generateValidColor(colorCount, previousColor, aboveColors, gridIndex, i);
+                }
+
+                gridArray[gridIndex].push(color);
+
+                // Impostiamo un'unica immagine per colore
+                const image = images[color];
+                cell.style.backgroundImage = `url('images/${image}')`;
+
+                gridElement.appendChild(cell);
+            }
+
+            gridContainer.appendChild(gridElement);
+        });
+    }
+
+    fillGrids();
+</script>
+
+</body>
+</html>
+

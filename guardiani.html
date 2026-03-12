@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I Guardiani — I Guardiani di Etherea</title>
+  <meta name="description" content="Conosci i sei Guardiani di Etherea: eroi elementali con poteri unici.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="img/logo_i.png">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="stylesheet.css">
+
+  <style>
+    /* ── GUARDIANI-ONLY STYLES ── */
+    .guardiani-section {
+      padding: 2rem 0 5rem;
+    }
+
+    /* Glow ring around active btn */
+    .guardian-btn.active {
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 0 20px var(--g-color);
+    }
+
+    /* Tooltip label on hover */
+    .guardian-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(5,13,26,0.95);
+      color: var(--text-light);
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding: 0.4rem 0.8rem;
+      border-radius: 3px;
+      border: 1px solid var(--blue-border);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 20;
+    }
+
+    /* On mobile, tooltip goes below */
+    @media (max-width: 768px) {
+      .guardian-btn::after {
+        left: 50%;
+        top: calc(100% + 8px);
+        transform: translateX(-50%);
+      }
+    }
+
+    .guardian-btn:hover::after {
+      opacity: 1;
+    }
+
+    /* Welcome illustration */
+    .welcome-icon {
+      font-size: 4rem;
+      color: var(--red);
+      opacity: 0.4;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    /* Card background tint based on guardian */
+    .guardian-card[data-guardian="foglia"] .guardian-img-col { background: rgba(60,160,60,0.06); }
+    .guardian-card[data-guardian="acque"]  .guardian-img-col { background: rgba(30,80,155,0.1); }
+    .guardian-card[data-guardian="terra"]  .guardian-img-col { background: rgba(245,190,0,0.06); }
+    .guardian-card[data-guardian="luce"]   .guardian-img-col { background: rgba(230,225,220,0.05); }
+    .guardian-card[data-guardian="tenebre"].guardian-img-col { background: rgba(85,90,90,0.15); }
+    .guardian-card[data-guardian="pozioni"].guardian-img-col { background: rgba(150,40,130,0.08); }
+
+    /* Stat bars */
+    .stat-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      font-family: var(--font-display);
+      letter-spacing: 0.06em;
+    }
+
+    .stat-bar-label {
+      width: 90px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+
+    .stat-bar-track {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .stat-value {
+      width: 24px;
+      text-align: right;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .stats-block {
+      margin: 1.5rem 0;
+      padding: 1rem 1.2rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .ability-tag {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-family: var(--font-display);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid currentColor;
+      margin: 0.25rem 0.2rem 0.25rem 0;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+<div id="nav-container"></div>
+
+<div class="page-wrapper">
+
+  <!-- Page hero -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="section-label">
+        <i class="fa-solid fa-shield-halved" style="margin-right:0.4em;"></i>Personaggi
+      </span>
+      <h1>I Guardiani di Etherea</h1>
+      <p style="max-width:560px;margin:1rem auto 0;color:var(--text-muted);font-size:1.05rem;">
+        Sei eroi, sei elementi, un solo destino. Seleziona un Guardiano per scoprire la sua storia.
+      </p>
+    </div>
+  </div>
+
+  <div class="red-glow-line"></div>
+
+  <!-- ═══ GUARDIANI LAYOUT ═══ -->
+  <section class="guardiani-section">
+    <div class="container--wide">
+
+      <div class="guardiani-layout" id="guardianiLayout">
+
+        <!-- ── RAIL: bottoni laterali ── -->
+        <div class="guardian-rail" role="tablist" aria-label="Seleziona un Guardiano">
+
+          <button class="guardian-btn"
+                  data-guardian="foglia"
+                  data-tooltip="Guardiano della Foglia"
+                  role="tab" aria-selected="false" aria-controls="card-foglia">
+            <img src="img/icona_foglia.png" alt="Foglia">
+          </button>
+
+          <button class="guardian-btn"
+                  data-guardian="acque"
+                  data-tooltip="Guardiano delle Acque"
+                  role="tab" aria-selected="false" aria-controls="card-acque">
+            <img src="img/icona_acque.png" alt="Acque">
+          </button>
+
+          <button class="guardian-btn"
+                  data-guardian="terra"
+                  data-tooltip="Guardiana della Terra"
+                  role="tab" aria-selected="false" aria-controls="card-terra">
+            <img src="img/icona_terra.png" alt="Terra">
+          </button>
+
+          <button class="guardian-btn"
+                  data-guardian="luce"
+                  data-tooltip="Guardiano della Luce"
+                  role="tab" aria-selected="false" aria-controls="card-luce">
+            <img src="img/icona_luce.png" alt="Luce">
+          </button>
+
+          <button class="guardian-btn"
+                  data-guardian="tenebre"
+                  data-tooltip="Guardiana delle Tenebre"
+                  role="tab" aria-selected="false" aria-controls="card-tenebre">
+            <img src="img/icona_tenebre.png" alt="Tenebre">
+          </button>
+
+          <button class="guardian-btn"
+                  data-guardian="pozioni"
+                  data-tooltip="Guardiano delle Pozioni"
+                  role="tab" aria-selected="false" aria-controls="card-pozioni">
+            <img src="img/icona_pozioni.png" alt="Pozioni">
+          </button>
+
+        </div><!-- /guardian-rail -->
+
+        <!-- ── PANEL: schede dei guardiani ── -->
+        <div class="guardian-panel" role="tabpanel">
+
+          <!-- WELCOME (default) -->
+          <div class="guardian-welcome" id="guardianWelcome">
+            <i class="fa-solid fa-shield-halved welcome-icon"></i>
+            <h2 style="margin-bottom:1rem;">I Guardiani di Etherea</h2>
+            <p style="max-width:420px;color:var(--text-muted);font-size:1rem;">
+              Sei eroi leggendari custodiscono l'equilibrio di Etherea. Ciascuno incarna un Elemento
+              e possiede abilità straordinarie. Dal dominio della natura alle arti oscure delle pozioni —
+              ogni Guardiano ha una storia da raccontare.
+            </p>
+            <p style="color:var(--text-muted);font-size:0.9rem;margin-top:1rem;">
+              <i class="fa-solid fa-hand-pointer" style="color:var(--red);margin-right:0.4em;"></i>
+              Seleziona un Guardiano per scoprire la sua scheda.
+            </p>
+          </div>
+
+          <!-- ─── CARD: FOGLIA ─── -->
+          <div class="guardian-card" id="card-foglia" data-guardian="foglia" role="tabpanel">
+            <div class="guardian-img-col">
+              <img src="img/guardiano_foglia.png" alt="Guardiano della Foglia">
+            </div>
+            <div class="guardian-text-col">
+              <h2 class="guardian-name" style="color:#3CA03C;">Sylvaran</h2>
+              <p class="guardian-role">Guardiano della Foglia &bull; Signore della Natura</p>
+              <div class="guardian-divider" style="color:#3CA03C;"></div>
+
+              <p>
+                [Testo segnaposto] <span class="g-em" style="color:#3CA03C;">Sylvaran</span> nacque
+                nel cuore della <strong>Grande Foresta Eterna</strong>, dove gli alberi parlano in lingue
+                antiche e le radici celano segreti millenari. Fin dal primo respiro, la natura stessa
+                lo riconobbe come proprio guardiano, cingendolo di un'aura di foglie luminose.
+              </p>
+              <p>
+                [Testo segnaposto] Con il suo <em>Bastone delle Radici</em>, Sylvaran può evocare
+                barriere di rovi, guarire le ferite dei compagni con linfe magiche e comandare
+                agli spiriti boschivi di guidare la squadra attraverso i labirinti più intricati.
+                La sua presenza <strong>accelera la crescita</strong> delle piante alleate e
+                <strong>indebolisce le creature oscure</strong> che temono la luce verde.
+              </p>
+
+              <div class="stats-block">
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Forza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:55%;background:#3CA03C;"></div></div>
+                  <span class="stat-value">5</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Agilità</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:75%;background:#3CA03C;"></div></div>
+                  <span class="stat-value">7</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Magia</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:85%;background:#3CA03C;"></div></div>
+                  <span class="stat-value">8</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Resistenza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:65%;background:#3CA03C;"></div></div>
+                  <span class="stat-value">6</span>
+                </div>
+              </div>
+
+              <div style="margin-top:0.5rem;">
+                <span class="ability-tag" style="color:#3CA03C;">Rigenerazione</span>
+                <span class="ability-tag" style="color:#3CA03C;">Controllo Radici</span>
+                <span class="ability-tag" style="color:#3CA03C;">Spirito del Bosco</span>
+              </div>
+
+              <p style="margin-top:1.5rem;font-size:0.92rem;color:var(--text-muted);">
+                [Testo segnaposto] Il punto debole di Sylvaran è il fuoco: le fiamme oscure dei nemici
+                riducono drasticamente le sue capacità magiche. Tuttavia, in presenza di acqua alleata,
+                diventa quasi invincibile.
+              </p>
+            </div>
+          </div><!-- /card-foglia -->
+
+          <!-- ─── CARD: ACQUE ─── -->
+          <div class="guardian-card" id="card-acque" data-guardian="acque" role="tabpanel">
+            <div class="guardian-img-col">
+              <img src="img/guardiano_acque.png" alt="Guardiano delle Acque">
+            </div>
+            <div class="guardian-text-col">
+              <h2 class="guardian-name" style="color:#1E509B;">Marevir</h2>
+              <p class="guardian-role">Guardiano delle Acque &bull; Signore delle Correnti</p>
+              <div class="guardian-divider" style="color:#1E509B;"></div>
+
+              <p>
+                [Testo segnaposto] <span class="g-em" style="color:#1E509B;">Marevir</span> è
+                antichissimo quanto il primo oceano. Nacque da una goccia dell'<strong>Acqua Primordiale</strong>
+                che scorreva prima ancora che il mondo avesse forma definitiva. La sua voce risuona
+                come onde sugli scogli, e il suo sguardo ha la profondità degli abissi insondabili.
+              </p>
+              <p>
+                [Testo segnaposto] Marevir può creare barriere liquide, lanciare getti d'acqua
+                potentissimi e <em>purificare aree contaminate</em> dalla corruzione. Sul tabellone,
+                i suoi movimenti raddoppiano su caselle acquatiche e può attraversare ostacoli
+                che bloccherebbero altri Guardiani grazie alla sua natura fluida.
+              </p>
+
+              <div class="stats-block">
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Forza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:60%;background:#1E509B;"></div></div>
+                  <span class="stat-value">6</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Agilità</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:90%;background:#1E509B;"></div></div>
+                  <span class="stat-value">9</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Magia</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:80%;background:#1E509B;"></div></div>
+                  <span class="stat-value">8</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Resistenza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:50%;background:#1E509B;"></div></div>
+                  <span class="stat-value">5</span>
+                </div>
+              </div>
+
+              <div style="margin-top:0.5rem;">
+                <span class="ability-tag" style="color:#1E509B;">Forma Liquida</span>
+                <span class="ability-tag" style="color:#1E509B;">Purificazione</span>
+                <span class="ability-tag" style="color:#1E509B;">Onda Devastante</span>
+              </div>
+            </div>
+          </div><!-- /card-acque -->
+
+          <!-- ─── CARD: TERRA ─── -->
+          <div class="guardian-card" id="card-terra" data-guardian="terra" role="tabpanel">
+            <div class="guardian-img-col">
+              <img src="img/guardiano_terra.png" alt="Guardiana della Terra">
+            </div>
+            <div class="guardian-text-col">
+              <h2 class="guardian-name" style="color:#F5BE00;">Aurantha</h2>
+              <p class="guardian-role">Guardiana della Terra &bull; Plasmastrice di Monti</p>
+              <div class="guardian-divider" style="color:#F5BE00;"></div>
+
+              <p>
+                [Testo segnaposto] <span class="g-em" style="color:#F5BE00;">Aurantha</span> è
+                una forza granitica e immutabile. Nata dall'incontro di magma e cristallo nelle
+                profondità della <strong>Montagna Eterna</strong>, porta nel suo corpo venature
+                dorate che brillano come filoni d'oro. La terra obbedisce alla sua voce come un
+                fedele alleato.
+              </p>
+              <p>
+                [Testo segnaposto] Aurantha può erigere muri di pietra istantanei, creare terremoti
+                localizzati per stordire i nemici e aprire passaggi sotterranei segreti.
+                È la <strong>più resistente</strong> tra tutti i Guardiani, capace di
+                <em>assorbire danni devastanti</em> senza cedere.
+              </p>
+
+              <div class="stats-block">
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Forza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:95%;background:#F5BE00;"></div></div>
+                  <span class="stat-value">9</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Agilità</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:35%;background:#F5BE00;"></div></div>
+                  <span class="stat-value">3</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Magia</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:60%;background:#F5BE00;"></div></div>
+                  <span class="stat-value">6</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Resistenza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:100%;background:#F5BE00;"></div></div>
+                  <span class="stat-value">10</span>
+                </div>
+              </div>
+
+              <div style="margin-top:0.5rem;">
+                <span class="ability-tag" style="color:#F5BE00;">Muro di Pietra</span>
+                <span class="ability-tag" style="color:#F5BE00;">Terremoto</span>
+                <span class="ability-tag" style="color:#F5BE00;">Pelle di Granito</span>
+              </div>
+            </div>
+          </div><!-- /card-terra -->
+
+          <!-- ─── CARD: LUCE ─── -->
+          <div class="guardian-card" id="card-luce" data-guardian="luce" role="tabpanel">
+            <div class="guardian-img-col">
+              <img src="img/guardiano_luce.png" alt="Guardiano della Luce">
+            </div>
+            <div class="guardian-text-col">
+              <h2 class="guardian-name" style="color:#E6E1DC;">Luminael</h2>
+              <p class="guardian-role">Guardiano della Luce &bull; Portatore dell'Alba</p>
+              <div class="guardian-divider" style="color:#E6E1DC;"></div>
+
+              <p>
+                [Testo segnaposto] <span class="g-em" style="color:#E6E1DC;">Luminael</span>
+                è l'incarnazione della speranza. Il suo corpo emette un bagliore argenteo visibile
+                anche nelle tenebre più profonde, e la sua presenza <strong>infonde coraggio</strong>
+                nei compagni e <strong>terrore nelle creature oscure</strong>. Visse per millenni
+                tra gli dei della luce prima di discendere a proteggere Etherea.
+              </p>
+              <p>
+                [Testo segnaposto] Luminael può rivelare percorsi nascosti illuminando il labirinto,
+                <em>purificare compagni dalla corruzione</em> e lanciare raggi di luce pura che
+                infliggono danni massicci alle entità dell'ombra. È il supporto ideale del gruppo,
+                capace di ribaltare situazioni disperate.
+              </p>
+
+              <div class="stats-block">
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Forza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:45%;background:#E6E1DC;"></div></div>
+                  <span class="stat-value">4</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Agilità</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:70%;background:#E6E1DC;"></div></div>
+                  <span class="stat-value">7</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Magia</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:100%;background:#E6E1DC;"></div></div>
+                  <span class="stat-value">10</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Resistenza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:55%;background:#E6E1DC;"></div></div>
+                  <span class="stat-value">5</span>
+                </div>
+              </div>
+
+              <div style="margin-top:0.5rem;">
+                <span class="ability-tag" style="color:#E6E1DC;">Rivelazione</span>
+                <span class="ability-tag" style="color:#E6E1DC;">Purificazione</span>
+                <span class="ability-tag" style="color:#E6E1DC;">Raggio Solare</span>
+              </div>
+            </div>
+          </div><!-- /card-luce -->
+
+          <!-- ─── CARD: TENEBRE ─── -->
+          <div class="guardian-card" id="card-tenebre" data-guardian="tenebre" role="tabpanel">
+            <div class="guardian-img-col">
+              <img src="img/guardiano_tenebre.png" alt="Guardiana delle Tenebre">
+            </div>
+            <div class="guardian-text-col">
+              <h2 class="guardian-name" style="color:#9ab0b0;">Umbra</h2>
+              <p class="guardian-role">Guardiana delle Tenebre &bull; Signora dei Confini</p>
+              <div class="guardian-divider" style="color:#9ab0b0;"></div>
+
+              <p>
+                [Testo segnaposto] <span class="g-em" style="color:#9ab0b0;">Umbra</span>
+                è forse la più incompresa tra i Guardiani. Molti la temono, scambiando il suo
+                dominio sulle ombre per malvagità. In realtà, è lei che <strong>impedisce alle anime
+                perdute</strong> di vagare senza meta e che mantiene il confine tra i vivi e i morti.
+                Senza di lei, Etherea sarebbe invasa da spettri.
+              </p>
+              <p>
+                [Testo segnaposto] Umbra si muove <em>attraverso le ombre</em> senza essere vista,
+                può indebolire i nemici rubando la loro energia vitale e comunicare con le anime
+                degli antichi Guardiani per ottenere preziose informazioni. La sua tattica preferita
+                è colpire dove nessuno si aspetta, usando il buio come sua armatura invisibile.
+              </p>
+
+              <div class="stats-block">
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Forza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:65%;background:#9ab0b0;"></div></div>
+                  <span class="stat-value">6</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Agilità</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:100%;background:#9ab0b0;"></div></div>
+                  <span class="stat-value">10</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Magia</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:80%;background:#9ab0b0;"></div></div>
+                  <span class="stat-value">8</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Resistenza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:45%;background:#9ab0b0;"></div></div>
+                  <span class="stat-value">4</span>
+                </div>
+              </div>
+
+              <div style="margin-top:0.5rem;">
+                <span class="ability-tag" style="color:#9ab0b0;">Passo d'Ombra</span>
+                <span class="ability-tag" style="color:#9ab0b0;">Assorbimento</span>
+                <span class="ability-tag" style="color:#9ab0b0;">Voce degli Spiriti</span>
+              </div>
+            </div>
+          </div><!-- /card-tenebre -->
+
+          <!-- ─── CARD: POZIONI ─── -->
+          <div class="guardian-card" id="card-pozioni" data-guardian="pozioni" role="tabpanel">
+            <div class="guardian-img-col">
+              <img src="img/guardiano_pozioni.png" alt="Guardiano delle Pozioni">
+            </div>
+            <div class="guardian-text-col">
+              <h2 class="guardian-name" style="color:#962882;">Venenix</h2>
+              <p class="guardian-role">Guardiano delle Pozioni &bull; Alchimista Arcano</p>
+              <div class="guardian-divider" style="color:#962882;"></div>
+
+              <p>
+                [Testo segnaposto] <span class="g-em" style="color:#962882;">Venenix</span>
+                è l'enigma vivente tra i Guardiani. Nessuno conosce con certezza le sue origini,
+                e lui non lo svela mai. Sa distillare dalle sostanze più comuni <strong>pozioni
+                di potere straordinario</strong> — veleni che corrompono i nemici,
+                antidoti che riportano in vita compagni caduti, elisir che amplificano le
+                capacità di chiunque li beva.
+              </p>
+              <p>
+                [Testo segnaposto] Il suo approccio alla battaglia è puramente strategico:
+                raramente affronta il nemico di petto, preferendo <em>alterare le condizioni
+                del campo</em> con le sue concozioni. Una sola fiala del suo
+                <strong>Veleno dell'Oblio</strong> può rendere inutilizzabile un intero corridoio
+                del labirinto per tre turni.
+              </p>
+
+              <div class="stats-block">
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Forza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:35%;background:#962882;"></div></div>
+                  <span class="stat-value">3</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Agilità</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:65%;background:#962882;"></div></div>
+                  <span class="stat-value">6</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Magia</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:100%;background:#962882;"></div></div>
+                  <span class="stat-value">10</span>
+                </div>
+                <div class="stat-bar-row">
+                  <span class="stat-bar-label">Resistenza</span>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" style="width:40%;background:#962882;"></div></div>
+                  <span class="stat-value">4</span>
+                </div>
+              </div>
+
+              <div style="margin-top:0.5rem;">
+                <span class="ability-tag" style="color:#962882;">Alchimia</span>
+                <span class="ability-tag" style="color:#962882;">Veleno dell'Oblio</span>
+                <span class="ability-tag" style="color:#962882;">Elisir Vitale</span>
+                <span class="ability-tag" style="color:#962882;">Fialetta d'Amplificazione</span>
+              </div>
+            </div>
+          </div><!-- /card-pozioni -->
+
+        </div><!-- /guardian-panel -->
+
+      </div><!-- /guardiani-layout -->
+
+      <!-- CTA -->
+      <div style="text-align:center;padding:3rem 0 1rem;" class="fade-in-on-scroll">
+        <a href="regolamento.html" class="btn btn-ghost" style="margin-right:1rem;">
+          <i class="fa-solid fa-book-open"></i> Regolamento
+        </a>
+        <a href="maze-gen.html" target="_blank" class="btn btn-primary">
+          <i class="fa-solid fa-dungeon"></i> Generatore Labirinto
+        </a>
+      </div>
+
+    </div><!-- /container--wide -->
+  </section>
+
+</div><!-- /page-wrapper -->
+
+<footer>
+  <img src="img/logo_i.png" alt="Etherea" class="footer-logo">
+  <p>
+    &copy; <span id="year"></span> I Guardiani di Etherea &mdash;
+    Tutti i diritti riservati
+  </p>
+</footer>
+
+<script src="menu.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ── GUARDIAN SELECTION LOGIC ── */
+  (function () {
+    const buttons  = document.querySelectorAll('.guardian-btn');
+    const cards    = document.querySelectorAll('.guardian-card');
+    const welcome  = document.getElementById('guardianWelcome');
+
+    function activateGuardian(id) {
+      // Deactivate all
+      buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      cards.forEach(c => c.classList.remove('active'));
+
+      // Hide welcome
+      if (welcome) welcome.classList.add('hidden');
+
+      // Activate selected
+      const btn  = document.querySelector(`.guardian-btn[data-guardian="${id}"]`);
+      const card = document.getElementById(`card-${id}`);
+      if (btn)  { btn.classList.add('active');  btn.setAttribute('aria-selected','true'); }
+      if (card) card.classList.add('active');
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => activateGuardian(btn.dataset.guardian));
+    });
+  })();
+</script>
+</body>
+</html>
