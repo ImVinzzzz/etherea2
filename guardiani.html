@@ -141,6 +141,69 @@
       margin: 0.25rem 0.2rem 0.25rem 0;
       opacity: 0.85;
     }
+
+    /* Matchups */
+    .matchups-container {
+      display: flex;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .matchup-box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .matchup-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .matchup-label.effective {
+      color: #2e7d32; /* Verde scuro */
+    }
+
+    .matchup-label.weak {
+      color: #c62828; /* Rosso scuro */
+    }
+
+    .matchup-bar {
+      height: 20px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.07);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .matchup-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .matchup-element-name {
+      position: relative;
+      width: 100%;
+      text-align: center;
+      font-size: 0.75rem;
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #fff;
+      text-shadow: 0 0 2px rgba(0,0,0,0.8);
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
@@ -282,6 +345,27 @@
                 </div>
               </div>
 
+              <div class="matchups-container">
+                <div class="matchup-box">
+                  <div class="matchup-label effective">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> Efficace su
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#1E509B;"></div>
+                    <span class="matchup-element-name">Acque</span>
+                  </div>
+                </div>
+                <div class="matchup-box">
+                  <div class="matchup-label weak">
+                    <i class="fa-solid fa-skull-crossbones"></i> Debole a
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#962882;"></div>
+                    <span class="matchup-element-name">Veleno (Pozioni)</span>
+                  </div>
+                </div>
+              </div>
+
               <div style="margin-top:0.5rem;">
                 <span class="ability-tag" style="color:#3CA03C;">Rigenerazione</span>
                 <span class="ability-tag" style="color:#3CA03C;">Controllo Radici</span>
@@ -342,6 +426,27 @@
                 </div>
               </div>
 
+              <div class="matchups-container">
+                <div class="matchup-box">
+                  <div class="matchup-label effective">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> Efficace su
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#F5BE00;"></div>
+                    <span class="matchup-element-name">Terra</span>
+                  </div>
+                </div>
+                <div class="matchup-box">
+                  <div class="matchup-label weak">
+                    <i class="fa-solid fa-skull-crossbones"></i> Debole a
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#3CA03C;"></div>
+                    <span class="matchup-element-name">Foglia</span>
+                  </div>
+                </div>
+              </div>
+
               <div style="margin-top:0.5rem;">
                 <span class="ability-tag" style="color:#1E509B;">Forma Liquida</span>
                 <span class="ability-tag" style="color:#1E509B;">Purificazione</span>
@@ -394,6 +499,27 @@
                   <span class="stat-bar-label">Resistenza</span>
                   <div class="stat-bar-track"><div class="stat-bar-fill" style="width:100%;background:#F5BE00;"></div></div>
                   <span class="stat-value">10</span>
+                </div>
+              </div>
+
+              <div class="matchups-container">
+                <div class="matchup-box">
+                  <div class="matchup-label effective">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> Efficace su
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#E6E1DC;"></div>
+                    <span class="matchup-element-name">Luce</span>
+                  </div>
+                </div>
+                <div class="matchup-box">
+                  <div class="matchup-label weak">
+                    <i class="fa-solid fa-skull-crossbones"></i> Debole a
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#1E509B;"></div>
+                    <span class="matchup-element-name">Acque</span>
+                  </div>
                 </div>
               </div>
 
@@ -452,6 +578,27 @@
                 </div>
               </div>
 
+              <div class="matchups-container">
+                <div class="matchup-box">
+                  <div class="matchup-label effective">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> Efficace su
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#9ab0b0;"></div>
+                    <span class="matchup-element-name">Tenebre</span>
+                  </div>
+                </div>
+                <div class="matchup-box">
+                  <div class="matchup-label weak">
+                    <i class="fa-solid fa-skull-crossbones"></i> Debole a
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#F5BE00;"></div>
+                    <span class="matchup-element-name">Terra</span>
+                  </div>
+                </div>
+              </div>
+
               <div style="margin-top:0.5rem;">
                 <span class="ability-tag" style="color:#E6E1DC;">Rivelazione</span>
                 <span class="ability-tag" style="color:#E6E1DC;">Purificazione</span>
@@ -504,6 +651,27 @@
                   <span class="stat-bar-label">Resistenza</span>
                   <div class="stat-bar-track"><div class="stat-bar-fill" style="width:45%;background:#9ab0b0;"></div></div>
                   <span class="stat-value">4</span>
+                </div>
+              </div>
+
+              <div class="matchups-container">
+                <div class="matchup-box">
+                  <div class="matchup-label effective">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> Efficace su
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#962882;"></div>
+                    <span class="matchup-element-name">Veleno (Pozioni)</span>
+                  </div>
+                </div>
+                <div class="matchup-box">
+                  <div class="matchup-label weak">
+                    <i class="fa-solid fa-skull-crossbones"></i> Debole a
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#E6E1DC;"></div>
+                    <span class="matchup-element-name">Luce</span>
+                  </div>
                 </div>
               </div>
 
@@ -564,6 +732,27 @@
                 </div>
               </div>
 
+              <div class="matchups-container">
+                <div class="matchup-box">
+                  <div class="matchup-label effective">
+                    <i class="fa-solid fa-arrow-up-right-dots"></i> Efficace su
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#3CA03C;"></div>
+                    <span class="matchup-element-name">Foglia</span>
+                  </div>
+                </div>
+                <div class="matchup-box">
+                  <div class="matchup-label weak">
+                    <i class="fa-solid fa-skull-crossbones"></i> Debole a
+                  </div>
+                  <div class="matchup-bar">
+                    <div class="matchup-bar-fill" style="background:#9ab0b0;"></div>
+                    <span class="matchup-element-name">Tenebre</span>
+                  </div>
+                </div>
+              </div>
+
               <div style="margin-top:0.5rem;">
                 <span class="ability-tag" style="color:#962882;">Alchimia</span>
                 <span class="ability-tag" style="color:#962882;">Veleno dell'Oblio</span>
@@ -612,7 +801,15 @@
 
     function activateGuardian(id) {
       // Deactivate all
-      buttons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      buttons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected','false');
+        const img = b.querySelector('img');
+        if (img) {
+          let currentSrc = img.getAttribute('src');
+          img.setAttribute('src', currentSrc.replace('-2.png', '.png'));
+        }
+      });
       cards.forEach(c => c.classList.remove('active'));
 
       // Hide welcome
@@ -621,7 +818,17 @@
       // Activate selected
       const btn  = document.querySelector(`.guardian-btn[data-guardian="${id}"]`);
       const card = document.getElementById(`card-${id}`);
-      if (btn)  { btn.classList.add('active');  btn.setAttribute('aria-selected','true'); }
+      if (btn)  {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected','true');
+        const img = btn.querySelector('img');
+        if (img) {
+          let currentSrc = img.getAttribute('src');
+          if (!currentSrc.includes('-2.png')) {
+            img.setAttribute('src', currentSrc.replace('.png', '-2.png'));
+          }
+        }
+      }
       if (card) card.classList.add('active');
     }
 
